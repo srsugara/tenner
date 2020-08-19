@@ -1,0 +1,18 @@
+.card .card-header {
+  cursor: pointer;
+}
+.card .card-header .icon {
+  transform: rotate(90deg);
+  transition: transform 150ms ease-out;
+}
+.card .card-content {
+  transition: max-height 250ms ease;
+  overflow: hidden;
+}
+
+.card.not-expanded .card-header .icon {
+  transform: rotate(0deg);
+}
+.card.not-expanded .card-content {
+  padding: 0;
+}

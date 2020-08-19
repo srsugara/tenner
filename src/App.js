@@ -1,24 +1,46 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
+import Header from './components/Header.jsx';
+import SideMenu from './components/SideMenu.jsx';
+import Login from './pages/Login.jsx';
+import Statistic from './pages/Statistic.jsx';
+import TestCase from './pages/TestCase.jsx';
+import TestRun from './pages/TestRun.jsx';
+import Report from './pages/Report.jsx';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Switch>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route path="/home">
+          <div style={{ display: 'flex' }}>
+            <div className="container">
+              <div className="tile is-ancestor">
+                <SideMenu />
+                <Switch>
+                  <Route path="/home/statistic">
+                    <Statistic />
+                  </Route>
+                  <Route path="/home/test-case">
+                    <TestCase />
+                  </Route>
+                  <Route path="/home/test-run">
+                    <TestRun />
+                  </Route>
+                  <Route path="/home/report">
+                    <Report />
+                  </Route>
+                </Switch>
+              </div>
+            </div>
+          </div>
+        </Route>
+      </Switch>
     </div>
   );
 }
