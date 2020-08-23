@@ -4,9 +4,9 @@ const Header = (props) => {
   return (
     <section className="section">
       <div className="container">
-        <h1 className="title">Tenner:Test Runner</h1>
-        <h2 className="subtitle">
-          A simple application <strong>to handle</strong> your test case
+        <h1 className="title has-text-grey">Test Case Management</h1>
+        <h2 className="subtitle has-text-grey">
+          A simple application <strong className="has-text-danger">to handle</strong> your test case
         </h2>
       </div>
     </section>
