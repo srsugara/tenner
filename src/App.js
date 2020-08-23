@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
+import 'react-bulma-components/dist/react-bulma-components.min.css'; //Bulma css
+import "react-datepicker/dist/react-datepicker.css"; //Datepicker css
 import Header from './components/Header.jsx';
 import SideMenu from './components/SideMenu.jsx';
 import Login from './pages/Login.jsx';
@@ -14,7 +16,7 @@ function App() {
     <div className="App">
       <Header />
       <Switch>
-        <Route exact path="/login">
+        <Route exact path="/">
           <Login />
         </Route>
         <Route path="/home">
