@@ -1,82 +1,157 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const Login = (props) => {
   const history = useHistory();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nameRegis, setNameRegis] = useState('');
+  const [emailRegis, setEmailRegis] = useState('');
+  const [passRegis, setPassRegis] = useState('');
 
-  const [state, setState] = React.useState({
-    email: '',
-    password: '',
-  });
-
-  const setInputEmail = (event) => {
-    setState({
-      ...state,
-      email: (event.target.value || '').trim(),
-    });
-  };
-
-  const setInputPassword = (event) => {
-    setState({
-      ...state,
-      password: event.target.value,
-    });
-  };
-
-  const submit = async (event) => {
+  const submitRegister = async (event) => {
     event.preventDefault();
-
-    if (!state.email) {
-      alert('Use your @gmail.com account');
-      return;
+    try {
+      let response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: nameRegis,
+          email: emailRegis,
+          password: passRegis,
+        }),
+      });
+      response = await response.json();
+    } catch (err) {
+      alert(err)
     }
-    if (!state.email.endsWith('@gmail.com')) {
-      alert('Use your @gmail.com account');
-      return;
-    }
-
-    return (
-      history.push("/home/statistic")
-    );
+    alert('Register success, you can login now')
   };
+
+  const submitLogin = async (event) => {
+    event.preventDefault();
+    let response = await fetch(
+      `/api/login?email=${email}&password=${password}`
+    );
+    response = await response.json();
+    response = response.data;
+    if (!response) {
+      alert('Email or password not found');
+      return;
+    }
+    if (email !== response.email) {
+      alert('Email or password invalid');
+      return;
+    }
+    return history.push('/home/statistic');
+  };
+
   return (
     <div>
-      <section className="hero is-medium is-warning is-bold">
+      <section className="hero is-medium is-light is-bold">
         <div className="hero-body">
           <div className="container">
             <div className="columns is-centered">
-              <article className="card">
+              <article className="card" style={{ marginRight: 50 }}>
                 <br />
                 <center>
-                  <h1 className="title">
-                    <div className="has-text-black">Please Login</div>
+                  <h1 className="has-text-grey is-family-primary is-size-3">
+                    Login
                   </h1>
                 </center>
+                <hr />
                 <div className="card-content">
-                  <p className="control">
+                  <p className="control has-icons-left">
                     <input
-                      className="input"
+                      className="input is-danger without-radius"
                       type="email"
-                      value={state.email}
-                      onChange={setInputEmail}
-                      placeholder="name@gmail.com"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="email"
                     />
-                  </p>        
-                  <p className="control">
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-envelope"></i>
+                    </span>
+                  </p>
+                  <br />
+                  <p className="control has-icons-left">
                     <input
-                      className="input"
+                      className="input is-danger without-radius"
                       type="password"
-                      value={state.password}
-                      onChange={setInputPassword}
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder="password"
                     />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-lock"></i>
+                    </span>
                   </p>
                   <br />
                   <p className="control">
                     <button
-                      className="button is-black is-fullwidth is-outlined"
-                      onClick={submit}
+                      className="button is-danger is-fullwidth without-radius"
+                      onClick={submitLogin}
                     >
                       Login
+                    </button>
+                  </p>
+                </div>
+              </article>
+              <article className="card" style={{ backgroundColor: '#ff1493' }}>
+                <br />
+                <center>
+                  <h1 className="has-text-white is-family-primary is-size-3">
+                    Register
+                  </h1>
+                </center>
+                <div className="card-content">
+                  <p className="control has-icons-left">
+                    <input
+                      className="input is-light without-radius"
+                      type="text"
+                      value={nameRegis}
+                      onChange={(event) => setNameRegis(event.target.value)}
+                      placeholder="full name"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-user"></i>
+                    </span>
+                  </p>
+                  <br />
+                  <p className="control has-icons-left">
+                    <input
+                      className="input is-light without-radius"
+                      type="email"
+                      value={emailRegis}
+                      onChange={(event) => setEmailRegis(event.target.value)}
+                      placeholder="email"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-envelope"></i>
+                    </span>
+                  </p>
+                  <br />
+                  <p className="control has-icons-left">
+                    <input
+                      className="input is-light without-radius"
+                      type="password"
+                      value={passRegis}
+                      onChange={(event) => setPassRegis(event.target.value)}
+                      placeholder="password"
+                    />
+                    <span className="icon is-small is-left">
+                      <i className="fas fa-lock"></i>
+                    </span>
+                  </p>
+                  <br />
+                  <p className="control has-background-light">
+                    <button
+                      className="button is-fullwidth without-radius has-text-danger"
+                      onClick={submitRegister}
+                    >
+                      Register
                     </button>
                   </p>
                 </div>
