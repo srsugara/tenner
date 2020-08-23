@@ -11,6 +11,7 @@ const dbname = "tenner";
 const db = client.database(dbname);
 
 // Declare the collections here. Here we are using only one collection (i.e friends).
+const User = db.collection("user");
 const TestRun = db.collection("testrun");
 
-export {db, TestRun};
+export {User, TestRun};
