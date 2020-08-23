@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Pie } from 'react-chartjs-2';
 
 const Statistic = (props) => {
-  let state = {
-    labels: ['Success', 'Failed', 'Skipped'],
-    datasets: [
-      {
-        label: 'Rainfall',
-        backgroundColor: ['#B21F00', '#2FDE00', '#6800B4'],
-        hoverBackgroundColor: ['#501800', '#175000', '#35014F'],
-        data: [60, 25, 15],
-      },
-    ],
+  const [statistic, setStatistic] = useState({});
+  
+  useEffect(() => {
+    fetchStatistic();
+  }, []);
+
+  const fetchStatistic = async () => {
+    let options = {
+      labels: ['Success', 'Failed'],
+      datasets: [
+        {
+          label: 'Test Diagram',
+          backgroundColor: ['#2FDE00', '#B21F00'],
+          hoverBackgroundColor: ['#175000', '#501800'],
+          data: [],
+        },
+      ],
+    };
+    let percentileSuccess, percentileFailed
+    let response = await fetch('/api/statistic');
+    response = await response.json();
+    percentileSuccess = ((response.data.success/(response.data.success + response.data.failed))*100).toFixed(2)
+    percentileFailed = ((response.data.failed/(response.data.success + response.data.failed))*100).toFixed(2)
+    options.datasets[0].data.push(percentileSuccess, percentileFailed);
+    setStatistic(options);
   };
 
   return (
     <div className="tile is-vertical is-10">
       <div className="tile is-parent">
-        <article className="tile is-child notification is-warning">
+        <article className="tile is-child notification">
           <p className="title">
-            <strong>Test Dashboard</strong>
+            <strong>Test Run Statistic</strong>
           </p>
+          <hr style={{ backgroundColor: 'black' }} />
           <Pie
-            data={state}
+            width={600}
+            height={200}
+            data={statistic}
             options={{
               title: {
                 display: true,

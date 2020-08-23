@@ -1,59 +1,117 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Form, Columns } from 'react-bulma-components';
+const { Select } = Form;
 
 const TestRun = (props) => {
+  const [microservice, setMicroservice] = useState([]);
+  const [testCase, setTestCase] = useState([]);
+  const [testRun, setTestRun] = useState([]);
+  const [selectedM, setSelectedM] = useState('');
+  const [selectedTC, setSelectedTC] = useState('');
+
+  useEffect(() => {
+    fetchMicroservice();
+    fetchTestRun();
+  }, []);
+
+  const fetchTestCase = async (service = '') => {
+    if (service !== '') {
+      let response = await fetch(
+        '/api/testcase?microservice=' + service
+      );
+      response = await response.json();
+      setTestCase(response.data);
+    }
+  };
+
+  const fetchMicroservice = async () => {
+    let response = await fetch('/api/microservice');
+    response = await response.json();
+    setMicroservice(response.data);
+    await filterTestCase(response.data[0].name);
+  };
+
+  const fetchTestRun = async () => {
+    let response = await fetch('/api/testrun');
+    response = await response.json();
+    setTestRun(response.data);
+  };
+
+  const filterTestCase = async (service) => {
+    await fetchTestCase(service);
+    setSelectedM(service);
+  };
+
   return (
     <div className="tile is-vertical is-10">
       <div className="tile is-parent">
-        <article className="tile is-child notification is-warning">
+        <article className="tile is-child notification">
           <p className="title">
             <strong>Test Run List</strong>
           </p>
-          <table className="table">
+          <hr style={{ backgroundColor: 'black' }} />
+          <Columns>
+            <Columns.Column size="two-thirds">
+              <Columns>
+                <Columns.Column>
+                  <Select
+                    onChange={(event) => filterTestCase(event.target.value)}
+                    name="microservice"
+                    value={selectedM}
+                  >
+                    <option disabled>Select Microservice</option>
+                    {microservice.map((data, index) => (
+                      <option key={index} value={data.name}>
+                        {data.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Columns.Column>
+                <Columns.Column>
+                  <Select
+                    onChange={(event) => setSelectedTC(event.target.value)}
+                    name="testcase"
+                    value={selectedTC}
+                  >
+                    <option disabled>Select Test Case</option>
+                    {testCase.map((data, index) => (
+                      <option key={index} value={data.file}>
+                        {data.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Columns.Column>
+                <Columns.Column>
+                  <button className="button is-danger">Execute</button>
+                </Columns.Column>
+              </Columns>
+            </Columns.Column>
+          </Columns>
+          <table className="table is-fullwidth">
             <thead>
               <tr>
                 <th>Feature</th>
                 <th>Date</th>
+                <th>Test Scenario</th>
                 <th>Duration</th>
                 <th>State</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Lorem ipsum - cell A1</td>
-                <td>Lorem ipsum - cell B1</td>
-                <td>Lorem ipsum - cell C1</td>
-                <td>Lorem ipsum - cell D1</td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum - cell A2</td>
-                <td>Lorem ipsum - cell B2</td>
-                <td>Lorem ipsum - cell C2</td>
-                <td>Lorem ipsum - cell D2</td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum - cell A3</td>
-                <td>Lorem ipsum - cell B3</td>
-                <td>Lorem ipsum - cell C3</td>
-                <td>Lorem ipsum - cell D3</td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum - cell A4</td>
-                <td>Lorem ipsum - cell B4</td>
-                <td>Lorem ipsum - cell C4</td>
-                <td>Lorem ipsum - cell D4</td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum - cell A5</td>
-                <td>Lorem ipsum - cell B5</td>
-                <td>Lorem ipsum - cell C5</td>
-                <td>Lorem ipsum - cell D5</td>
-              </tr>
-              <tr>
-                <td>Lorem ipsum - cell A6</td>
-                <td>Lorem ipsum - cell B6</td>
-                <td>Lorem ipsum - cell C6</td>
-                <td>Lorem ipsum - cell D6</td>
-              </tr>
+              {testRun.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.testCaseName}</td>
+                  <td>{data.executedAt.substring(0,10)}</td>
+                  <td>{data.totalScenario}</td>
+                  <td>{data.duration}s</td>
+                  <td className="control has-icons-right">
+                    {data.state}
+                    <span className="icon has-text-info is-right">
+                      <i className="fas fa-external-link-alt"></i>
+                    </span>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </article>
