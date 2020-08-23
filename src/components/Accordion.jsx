@@ -6,8 +6,7 @@ class Accordion extends React.Component {
     super(props);
 
     this.state = {
-      expanded: false,
-      height: 0,
+      expanded: false
     };
 
     this.toggleCardState = this.toggleCardState.bind(this);
@@ -36,7 +35,7 @@ class Accordion extends React.Component {
           </header>
           <div
             className="card-content"
-            style={{ maxHeight: this.state.height }}
+            style={{ maxHeight: this.state.expanded ? 1000: 0}}
             ref={(content) => (this.content = content)}
           >
             <div className="content">{children}</div>
