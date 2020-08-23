@@ -36,3 +36,36 @@
     transform: rotate(360deg);
   }
 }
+
+.react-datepicker__input-container input{
+  font-size: 1em;
+  margin-left: 1em;
+  height: 2.45em;
+  background-color: #fff;
+  border-color: #dbdbdb;
+  border-radius: 4px;
+  color: #363636;
+  padding: 0.5em;
+  border-width: 0.05em;
+}
+.dropdown-menu .dropdown-content{
+  background-color: black;
+  padding:0em;
+  margin:auto;
+  width:80%
+}
+.dropdown-menu .dropdown-content .dropdown-item{
+  height: 3em;
+  background-color: black;
+  padding: 0em;
+}
+
+.control .without-radius{
+  border-radius: 0;
+  opacity: 60%;
+}
+
+.display-linebreak {
+  white-space: pre-line;
+  text-align: left;
+}
