@@ -1,6 +1,6 @@
 import { Application, Router, send } from 'https://deno.land/x/oak/mod.ts';
 import { oakCors } from 'https://deno.land/x/cors/mod.ts';
-// import { exec } from "https://deno.land/x/exec/mod.ts";
+import { staticFileMiddleware } from './staticFileMiddleware.js';
 import {
   loginUser,
   registerUser,
@@ -24,6 +24,7 @@ router
   .post('/api/testrun', addTestRun);
 
 app.use(oakCors());
+app.use(staticFileMiddleware);
 app.use(router.routes());
 app.use(router.allowedMethods());
 

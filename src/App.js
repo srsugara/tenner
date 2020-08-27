@@ -2,7 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import 'react-bulma-components/dist/react-bulma-components.min.css'; //Bulma css
-import "react-datepicker/dist/react-datepicker.css"; //Datepicker css
+import 'react-datepicker/dist/react-datepicker.css';
+import AppContext from './AppContext'; //Datepicker css
 import Header from './components/Header.jsx';
 import SideMenu from './components/SideMenu.jsx';
 import Login from './pages/Login.jsx';
@@ -11,38 +12,43 @@ import TestCase from './pages/TestCase.jsx';
 import TestRun from './pages/TestRun.jsx';
 import Report from './pages/Report.jsx';
 
+const { NameProvider } = AppContext;
+const reload = () => window.location.reload();
+
 function App() {
   return (
     <div className="App">
-      <Header />
-      <Switch>
-        <Route exact path="/">
-          <Login />
-        </Route>
-        <Route path="/home">
-          <div style={{ display: 'flex' }}>
-            <div className="container">
-              <div className="tile is-ancestor">
-                <SideMenu />
-                <Switch>
-                  <Route path="/home/statistic">
-                    <Statistic />
-                  </Route>
-                  <Route path="/home/test-case">
-                    <TestCase />
-                  </Route>
-                  <Route path="/home/test-run">
-                    <TestRun />
-                  </Route>
-                  <Route path="/home/report">
-                    <Report />
-                  </Route>
-                </Switch>
+      <NameProvider>
+        <Header />
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route path="/home">
+            <div style={{ display: 'flex' }}>
+              <div className="container">
+                <div className="tile is-ancestor">
+                  <SideMenu />
+                  <Switch>
+                    <Route path="/home/statistic">
+                      <Statistic />
+                    </Route>
+                    <Route path="/home/test-case">
+                      <TestCase />
+                    </Route>
+                    <Route path="/home/test-run">
+                      <TestRun />
+                    </Route>
+                    <Route path="/home/report">
+                      <Report />
+                    </Route>
+                  </Switch>
+                </div>
               </div>
             </div>
-          </div>
-        </Route>
-      </Switch>
+          </Route>
+        </Switch>
+      </NameProvider>
     </div>
   );
 }

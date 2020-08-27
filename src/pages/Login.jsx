@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import AppContext from '../AppContext'
+const { NameContext } = AppContext;
 
 const Login = (props) => {
+  const nameProps = useContext(NameContext);
   const history = useHistory();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +15,7 @@ const Login = (props) => {
   const submitRegister = async (event) => {
     event.preventDefault();
     try {
-      let response = await fetch('/api/register', {
+      await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,11 +26,13 @@ const Login = (props) => {
           password: passRegis,
         }),
       });
-      response = await response.json();
+      setPassRegis('')
+      setNameRegis('')
+      setEmailRegis('')
     } catch (err) {
       alert(err)
     }
-    alert('Register success, you can login now')
+    alert('Register success, you can login now!')
   };
 
   const submitLogin = async (event) => {
@@ -45,6 +50,8 @@ const Login = (props) => {
       alert('Email or password invalid');
       return;
     }
+    localStorage.setItem('name', response.name)
+    nameProps.setName(response.name)
     return history.push('/home/statistic');
   };
 

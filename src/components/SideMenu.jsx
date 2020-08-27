@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bulma-components';
 import profil from '../user.png';
+import AppContext from '../AppContext'
+const { NameContext } = AppContext;
 
 const SideMenu = (props) => {
-  const username = 'Salis Mahmudah';
+  const nameProps = useContext(NameContext)
   return (
     <div className="tile is-parent is-2">
       <article className="tile is-child notification is-black">
@@ -15,10 +17,11 @@ const SideMenu = (props) => {
             src={profil}
             alt="Bulma: a modern CSS framework based on Flexbox"
           />
-          <Dropdown color="black" label={username}>
+          <Dropdown color="black" label={nameProps.name || localStorage.getItem('name')}>
             <Dropdown.Item value="">
               <Link
-                className="button is-danger is-fullwidth"
+                onClick={event => localStorage.removeItem('name')}
+                className="button is-danger"
                 to="/"
                 style={{ textDecoration: 'none' }}
               >
@@ -26,7 +29,7 @@ const SideMenu = (props) => {
               </Link>
             </Dropdown.Item>
           </Dropdown>
-          <div className="tile is-vertical is-parent">
+          <div style={{width:'11.5rem'}} className="tile is-vertical is-parent">
             <Link
               className="button is-danger is-outlined"
               to="/home/statistic"

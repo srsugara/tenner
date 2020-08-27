@@ -6,6 +6,7 @@
 .pnp.js
 .deno_plugins
 /Archive
+/reports
 
 # testing
 /coverage

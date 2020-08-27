@@ -16,9 +16,7 @@ const TestRun = (props) => {
 
   const fetchTestCase = async (service = '') => {
     if (service !== '') {
-      let response = await fetch(
-        '/api/testcase?microservice=' + service
-      );
+      let response = await fetch('/api/testcase?microservice=' + service);
       response = await response.json();
       setTestCase(response.data);
     }
@@ -40,6 +38,11 @@ const TestRun = (props) => {
   const filterTestCase = async (service) => {
     await fetchTestCase(service);
     setSelectedM(service);
+  };
+
+  const openExternalReport = (folderTarget) => {
+    console.log('test');
+    // window.location.href = `/copy${folderTarget}/index.html`
   };
 
   return (
@@ -101,13 +104,15 @@ const TestRun = (props) => {
               {testRun.map((data, index) => (
                 <tr key={index}>
                   <td>{data.testCaseName}</td>
-                  <td>{data.executedAt.substring(0,10)}</td>
+                  <td>{data.executedAt.substring(0, 10)}</td>
                   <td>{data.totalScenario}</td>
                   <td>{data.duration}s</td>
                   <td className="control has-icons-right">
                     {data.state}
-                    <span className="icon has-text-info is-right">
-                      <i className="fas fa-external-link-alt"></i>
+                    <span className="has-text-info is-pulled-right">
+                      <a target="_blank" rel="noopener noreferrer" href={`http://localhost:9090/copy${data._id.$oid}/index.html`}>
+                        <i className="fas fa-external-link-alt"></i>
+                      </a>
                     </span>
                   </td>
                 </tr>

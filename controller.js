@@ -1,5 +1,6 @@
 import { User, TestRun } from './mongo.js';
 import { readCSVObjects } from 'https://deno.land/x/csv/mod.ts';
+import { exec } from 'https://deno.land/x/exec/mod.ts';
 
 const decoder = new TextDecoder('utf-8');
 const pathFeatures = 'Archive/src/test/resources/features/';
@@ -211,18 +212,56 @@ const addTestRun = async ({ response, request }) => {
     const body = await request.body();
     let data = await body.value;
     data.executedAt = new Date().addHours(7);
-    let test = await TestRun.insertOne(data);
-    const f = await Deno.open('Archive/target/site/serenity/results.csv');
-    let csvResult = [];
-    for await (const obj of readCSVObjects(f)) {
-      csvResult.push(obj);
-    }
-    f.close();
-    response.status = 201;
-    response.body = {
-      success: true,
-      data: csvResult,
-    };
+
+    let insert = await TestRun.insertOne(data);
+    // const cmd = Deno.run({
+    //   cmd: ['cp',''],
+    //   stdout: 'piped',
+    //   stderr: 'piped',
+    // });
+
+    // const output = await cmd.output(); // "piped" must be set
+    // const path = decoder.decode(output);
+    const cmd = Deno.run({
+      cmd: ["mkdir"],
+      cwd: Deno.cwd(),
+      stdout: 'piped',
+      stderr: 'piped',
+    });
+    
+    console.log(decoder.decode(await cmd.output()))
+    // await exec(
+    //   `cp -R "${Deno.cwd()}/Archive/target/site/serenity" "${Deno.cwd()}/reports/copy${insert.$oid}"`
+    // );
+
+    // // cmd.close();
+    // const f = await Deno.open('Archive/target/site/serenity/results.csv');
+    // let csvResult = [];
+    // for await (const obj of readCSVObjects(f)) {
+    //   csvResult.push(obj);
+    // }
+    // f.close();
+    // data = {
+    //   state: '',
+    //   totalScenario: csvResult.length,
+    //   duration: 0,
+    // };
+    // let stateCount = 0;
+    // csvResult.map((value, index) => {
+    //   data.duration = data.duration + parseFloat(value['Duration (s)']);
+    //   if (value.Result.toLowerCase() === 'success') {
+    //     stateCount++;
+    //   }
+    // });
+    // data.duration = parseInt(data.duration);
+    // data.state = stateCount === csvResult.length ? 'success' : 'failed';
+    // // Updating the database
+    // await TestRun.updateOne({ _id: { $oid: insert.$oid } }, { $set: data });
+    // response.status = 201;
+    // response.body = {
+    //   success: true,
+    //   data: csvResult,
+    // };
   }
 };
 

@@ -35,7 +35,7 @@ class Accordion extends React.Component {
           </header>
           <div
             className="card-content"
-            style={{ maxHeight: this.state.expanded ? 1000: 0}}
+            style={{ maxHeight: this.state.expanded ? 500: 0}}
             ref={(content) => (this.content = content)}
           >
             <div className="content">{children}</div>
