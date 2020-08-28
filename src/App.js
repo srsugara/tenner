@@ -13,7 +13,6 @@ import TestRun from './pages/TestRun.jsx';
 import Report from './pages/Report.jsx';
 
 const { NameProvider } = AppContext;
-const reload = () => window.location.reload();
 
 function App() {
   return (
