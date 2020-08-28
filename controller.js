@@ -230,9 +230,8 @@ const addTestRun = async ({ response, request }) => {
       stdout: 'piped',
       stderr: 'piped',
     });
-
-    cmd.close();
-
+    await cmd.output()
+    cmd.close()
     await exec(
       `cp -R "${Deno.cwd()}/Archive/target/site/serenity" "${Deno.cwd()}/reports/copy${
         insert.$oid

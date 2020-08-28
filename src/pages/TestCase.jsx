@@ -20,6 +20,7 @@ const TestCase = (props) => {
   }, []);
 
   const fetchTestCase = async (service = '') => {
+    service = service === 'All Microservice' ? '' : service
     let response = await fetch('/api/testcase?microservice=' + service);
     response = await response.json();
     setTestCase(response.data);
