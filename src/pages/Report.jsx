@@ -80,7 +80,7 @@ const Report = (props) => {
                   {testRun.map((data, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{data.testCaseName}</td>
+                      <td>{data.feature}</td>
                       <td>{data.executedAt.substring(0, 10)}</td>
                       <td>{data.duration}s</td>
                       <td>{data.state}</td>

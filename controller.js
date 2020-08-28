@@ -158,7 +158,7 @@ const getTestRun = async ({ response, request }) => {
       testRun = await TestRun.aggregate([
         {
           $project: {
-            testCaseName: 1,
+            feature: 1,
             state: 1,
             totalScenario: 1,
             duration: 1,
